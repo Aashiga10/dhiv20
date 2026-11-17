@@ -708,7 +708,7 @@ function setupMakeWish() {
 }
 
 // -------------------------------------------------------------
-// 11. AUDIO MUSIC TOGGLE (PLAYS YEDHO ONDRU MP3)
+// 11. AUDIO MUSIC CONTROLLER (AUTOPLAY ON OPEN & STOP WHEN FINISHED)
 // -------------------------------------------------------------
 function setupAudioController() {
   const toggleBtn = document.getElementById('musicToggleBtn');
@@ -718,12 +718,15 @@ function setupAudioController() {
 
   if (!toggleBtn || !audio) return;
 
+  // Make sure loop is disabled so it stops when finished
+  audio.loop = false;
+
   function playAudio() {
     audio.play().then(() => {
       if (btnText) btnText.textContent = "Pause Song ⏸️";
       if (wave) wave.classList.add('playing');
     }).catch(() => {
-      // Browsers require user interaction before autoplaying audio
+      // Waiting for user gesture if browser restricts immediate autoplay
     });
   }
 
@@ -733,25 +736,41 @@ function setupAudioController() {
     if (wave) wave.classList.remove('playing');
   }
 
+  // 1. Attempt to play immediately on open
+  playAudio();
+
+  // 2. Play on first interaction (click, touch, or scroll) if initial autoplay was blocked
+  const playOnFirstInteraction = () => {
+    if (audio.paused && !audio.ended) {
+      playAudio();
+    }
+    ['click', 'touchstart', 'pointerdown', 'scroll'].forEach(evt => {
+      document.removeEventListener(evt, playOnFirstInteraction);
+      window.removeEventListener(evt, playOnFirstInteraction);
+    });
+  };
+
+  ['click', 'touchstart', 'pointerdown', 'scroll'].forEach(evt => {
+    document.addEventListener(evt, playOnFirstInteraction, { passive: true, once: true });
+    window.addEventListener(evt, playOnFirstInteraction, { passive: true, once: true });
+  });
+
+  // 3. Toggle button
   toggleBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     if (audio.paused) {
+      if (audio.ended) audio.currentTime = 0;
       playAudio();
     } else {
       pauseAudio();
     }
   });
 
-  // Start playing gently on first user click anywhere on page
-  const playOnFirstTouch = () => {
-    if (audio.paused) {
-      playAudio();
-    }
-    document.removeEventListener('click', playOnFirstTouch);
-    document.removeEventListener('touchstart', playOnFirstTouch);
-  };
-  document.addEventListener('click', playOnFirstTouch, { once: true });
-  document.addEventListener('touchstart', playOnFirstTouch, { once: true });
+  // 4. When song finishes, STOP cleanly (no loop)
+  audio.addEventListener('ended', () => {
+    if (btnText) btnText.textContent = "Replay Song 🎵";
+    if (wave) wave.classList.remove('playing');
+  });
 }
 
 // -------------------------------------------------------------
