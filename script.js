@@ -708,26 +708,50 @@ function setupMakeWish() {
 }
 
 // -------------------------------------------------------------
-// 11. AUDIO MUSIC TOGGLE
+// 11. AUDIO MUSIC TOGGLE (PLAYS YEDHO ONDRU MP3)
 // -------------------------------------------------------------
 function setupAudioController() {
   const toggleBtn = document.getElementById('musicToggleBtn');
   const btnText = document.getElementById('musicBtnText');
   const wave = document.getElementById('soundWave');
+  const audio = document.getElementById('bgMusic');
 
-  if (!toggleBtn) return;
+  if (!toggleBtn || !audio) return;
 
-  toggleBtn.addEventListener('click', () => {
-    if (!synth.isPlaying) {
-      synth.startMelody();
-      if (btnText) btnText.textContent = "Pause Tune";
+  function playAudio() {
+    audio.play().then(() => {
+      if (btnText) btnText.textContent = "Pause Song ⏸️";
       if (wave) wave.classList.add('playing');
+    }).catch(() => {
+      // Browsers require user interaction before autoplaying audio
+    });
+  }
+
+  function pauseAudio() {
+    audio.pause();
+    if (btnText) btnText.textContent = "Play Song 💖";
+    if (wave) wave.classList.remove('playing');
+  }
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (audio.paused) {
+      playAudio();
     } else {
-      synth.stopMelody();
-      if (btnText) btnText.textContent = "Play Birthday Tune";
-      if (wave) wave.classList.remove('playing');
+      pauseAudio();
     }
   });
+
+  // Start playing gently on first user click anywhere on page
+  const playOnFirstTouch = () => {
+    if (audio.paused) {
+      playAudio();
+    }
+    document.removeEventListener('click', playOnFirstTouch);
+    document.removeEventListener('touchstart', playOnFirstTouch);
+  };
+  document.addEventListener('click', playOnFirstTouch, { once: true });
+  document.addEventListener('touchstart', playOnFirstTouch, { once: true });
 }
 
 // -------------------------------------------------------------
@@ -790,13 +814,14 @@ function setupVideoSection() {
   const celebrateBtn = document.getElementById('videoCelebrationBtn');
   const btnText = document.getElementById('musicBtnText');
   const wave = document.getElementById('soundWave');
+  const audio = document.getElementById('bgMusic');
 
   if (video) {
     video.addEventListener('play', () => {
-      // Pause background ambient music if running so sound does not overlap
-      if (synth && synth.isPlaying) {
-        synth.stopMelody();
-        if (btnText) btnText.textContent = "Play Birthday Tune";
+      // Pause song if playing so audio does not overlap with video
+      if (audio && !audio.paused) {
+        audio.pause();
+        if (btnText) btnText.textContent = "Play Song 💖";
         if (wave) wave.classList.remove('playing');
       }
     });
