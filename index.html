@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ta, en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy 20th Birthday YellowHearteeey! ✨ 20:11 • Nov 20</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <!-- Ambient Audio Synthesizer & Music Toggle -->
+  <div class="audio-control-bar">
+    <button id="musicToggleBtn" class="glass-pill-btn" aria-label="Toggle Birthday Music">
+      <span class="music-icon">🎵</span>
+      <span id="musicBtnText">Play Birthday Tune</span>
+      <div class="sound-wave" id="soundWave">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </button>
+  </div>
+
+  <!-- Background Animated Starfield & Floating Glow Orbs -->
+  <div class="bg-lights">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    <div class="glow-orb orb-4"></div>
+  </div>
+  <canvas id="particlesCanvas"></canvas>
+
+  <!-- Main Container -->
+  <main class="page-wrapper">
+
+    <!-- HERO SECTION -->
+    <section class="hero-section text-center">
+      <div class="golden-tag animate-fade-in">
+        <span class="sparkle">✨</span> Chapter 20 Unlocked <span class="sparkle">✨</span>
+      </div>
+      
+      <h1 class="main-title animate-pop">
+        Happy <span class="highlight-twenty">20<sup>th</sup></span> Birthday,
+        <br>
+        <span class="friend-name" id="displayFriendName">YellowHearteey</span>! 💖
+      </h1>
+      
+      <p class="tamil-quote animate-slide-up">
+        "இருபது வயதின் புது வசந்தம்... உன் வாழ்வின் ஒவ்வொரு நொடியும் புன்னகையால் நிறையட்டும்!" 🌸
+      </p>
+
+      <p class="hero-subtitle animate-slide-up">
+        November 20 • Welcome to the roaring twenties full of magic, sparkle, and endless dreams!
+      </p>
+
+      <!-- 11:20 COSMIC BADGE -->
+      <div class="cosmic-clock-card glass-card animate-glow">
+        <div class="cosmic-header">
+          <span class="cosmic-badge">⭐ The 11:20 • 20 Nov Synchronicity ⭐</span>
+        </div>
+        <div class="cosmic-content">
+          <div class="cosmic-time-display">
+            <span class="digital-time" id="cosmicDigitalClock">11:20</span>
+            <span class="am-pm">SPECIAL</span>
+          </div>
+          <div class="cosmic-date-display">
+            <span class="date-highlight">20</span>th November • Marking 20 Years of Radiance!
+          </div>
+          <p class="cosmic-desc">
+            Some moments are written in the stars. 20 years, Nov 20 & 11:20 — when the universe brought you into this world!
+          </p>
+          <div class="cosmic-actions">
+            <button id="makeWishBtn" class="glow-btn">
+              <span>Make an 11:20 Wish 🌠</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Countdown / Celebration Banner -->
+        <div class="countdown-container" id="countdownWrapper">
+          <div class="countdown-title" id="countdownLabel">Countdown to Nov 20, 11:20 AM:</div>
+          <div class="timer-grid">
+            <div class="time-box"><span id="days">00</span><label>Days</label></div>
+            <div class="time-box"><span id="hours">00</span><label>Hours</label></div>
+            <div class="time-box"><span id="minutes">00</span><label>Mins</label></div>
+            <div class="time-box"><span id="seconds">00</span><label>Secs</label></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE CAKE & CANDLE SECTION -->
+    <section class="section-container cake-section">
+      <div class="section-badge">🎂 Make a Wish</div>
+      <h2 class="section-title">Blow Your 20th Birthday Candles!</h2>
+      <p class="section-subtitle">Tap the candles to blow them out and cut your special golden cake</p>
+
+      <div class="interactive-cake-box glass-card">
+        <!-- Interactive Cake Graphic -->
+        <div class="cake-stage" id="cakeStage">
+          <!-- Sparkles Container -->
+          <div class="cake-sparkles" id="cakeSparkles"></div>
+
+          <!-- Numbers / Candles -->
+          <div class="candles-wrapper">
+            <!-- Candle '2' -->
+            <div class="number-candle" id="candle2" title="Tap to blow out!">
+              <div class="candle-flame" id="flame1">
+                <div class="flame-core"></div>
+              </div>
+              <div class="candle-smoke" id="smoke1"></div>
+              <div class="candle-wick"></div>
+              <div class="candle-numeral">2</div>
+            </div>
+
+            <!-- Candle '0' -->
+            <div class="number-candle" id="candle0" title="Tap to blow out!">
+              <div class="candle-flame" id="flame2">
+                <div class="flame-core"></div>
+              </div>
+              <div class="candle-smoke" id="smoke2"></div>
+              <div class="candle-wick"></div>
+              <div class="candle-numeral">0</div>
+            </div>
+          </div>
+
+          <!-- The Cake Layers -->
+          <div class="cake-body" id="cakeBody">
+            <div class="cake-layer layer-top">
+              <div class="frosting-drips">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="strawberries">
+                🍓 🌸 🍓 🌸 🍓
+              </div>
+            </div>
+            <div class="cake-layer layer-middle">
+              <div class="icing-decor">✧ Happy 20th Birthday ✧</div>
+            </div>
+            <div class="cake-layer layer-bottom"></div>
+            <div class="cake-plate"></div>
+          </div>
+        </div>
+
+        <!-- Cake Controls & Status -->
+        <div class="cake-controls">
+          <div class="cake-status-msg" id="cakeMessage">
+            ✨ Tap the candles to blow them out or click the button below! ✨
+          </div>
+          <div class="btn-group">
+            <button id="blowCandlesBtn" class="action-btn glow-pink">
+              💨 Blow Candles
+            </button>
+            <button id="cutCakeBtn" class="action-btn glow-gold" disabled>
+              🔪 Cut the Cake
+            </button>
+            <button id="confettiShowerBtn" class="action-btn glow-violet">
+              🎉 Confetti Blast!
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 20 REASONS / 20 QUOTES INTERACTIVE DECK -->
+    <section class="section-container reasons-section">
+      <div class="section-badge">💌 20 Chapters • 20 Wishes</div>
+      <h2 class="section-title">20 Reasons Why You're Truly Exceptional</h2>
+      <p class="section-subtitle">
+        One special note for every single year of your wonderful life. Click each card to reveal!
+      </p>
+
+      <div class="deck-progress-bar-container">
+        <div class="deck-stats">
+          <span>Revealed: <strong id="revealedCount">0</strong> / 20</span>
+          <button id="revealAllBtn" class="text-link-btn">Reveal All ✨</button>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="deckProgressBar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- 20 Grid Cards -->
+      <div class="cards-grid" id="reasonsGrid">
+        <!-- Injected via JavaScript dynamically -->
+      </div>
+    </section>
+
+    <!-- BALLOON POP MINI GAME -->
+    <section class="section-container balloon-section">
+      <div class="section-badge">🎈 Birthday Surprise Pop</div>
+      <h2 class="section-title">Pop the Birthday Balloons!</h2>
+      <p class="section-subtitle">Click or tap any balloon to pop it and uncover sweet hidden wishes</p>
+
+      <div class="balloon-arena glass-card" id="balloonArena">
+        <div class="arena-overlay-tip">🎈 Tap any balloon! 🎈</div>
+        <!-- Balloons will float here -->
+      </div>
+      <div class="balloon-popup-message" id="balloonWishDisplay">
+        <span class="wish-icon">🎁</span>
+        <span class="wish-text" id="balloonWishText">Pop a balloon to reveal a birthday blessing!</span>
+      </div>
+    </section>
+
+    <!-- PHOTO GALLERY / POLAROID MEMORIES -->
+    <section class="section-container memories-section">
+      <div class="section-badge">📸 Beautiful Memories</div>
+      <h2 class="section-title">Memories of Chapter 20</h2>
+      <p class="section-subtitle">
+        Every picture holds a thousand smiles and endless joy
+      </p>
+
+      <div class="polaroid-gallery" id="polaroidGallery">
+        <!-- Polaroid 1 -->
+        <div class="polaroid-card tilt-left">
+          <div class="pin">📌</div>
+          <div class="polaroid-img-wrapper">
+            <img src="dhiv1.jpeg" alt="Dhivya - Sunshine" class="polaroid-img">
+          </div>
+          <div class="polaroid-caption">
+            <h3>Pure Sunshine ☀️</h3>
+            <p>Your smile brightens even the darkest of days!</p>
+          </div>
+        </div>
+
+        <!-- Polaroid 2 -->
+        <div class="polaroid-card tilt-right">
+          <div class="pin">👑</div>
+          <div class="polaroid-img-wrapper">
+            <img src="dhiv2.jpeg" alt="Dhivya - Turning 20 in Style" class="polaroid-img">
+          </div>
+          <div class="polaroid-caption">
+            <h3>Turning 20 in Style 👑</h3>
+            <p>Leaving teen years with grace and stepping into power!</p>
+          </div>
+        </div>
+
+        <!-- Polaroid 3 -->
+        <div class="polaroid-card tilt-straight">
+          <div class="pin">😤❤️</div>
+          <div class="polaroid-img-wrapper">
+            <img src="dhiv4.jpeg" alt="Dhivya - My Favorite Headache" class="polaroid-img">
+          </div>
+          <div class="polaroid-caption">
+            <h3>My Favorite Headache 😤💖</h3>
+            <p>We fight, we argue, but I can never stay mad at you!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-hint">
+        💡 <small>Tip: You can easily add your own real photos in the code by replacing the image links!</small>
+      </div>
+    </section>
+
+    <!-- SPECIAL BIRTHDAY REEL & VIDEO SECTION -->
+    <section class="section-container video-section">
+      <div class="section-badge">🎬 Birthday Reel</div>
+      <h2 class="section-title">A Special Video for Chapter 20</h2>
+      <p class="section-subtitle">
+        Press play to watch sweet memories and relive the magic! ✨
+      </p>
+
+      <div class="video-card glass-card">
+        <div class="video-film-tape">
+          <div class="tape-sprockets left-sprockets">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="video-wrapper">
+            <video id="bdayVideo" controls playsinline preload="metadata" poster="dhiv1.jpeg">
+              <source src="dhiv3.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="tape-sprockets right-sprockets">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <div class="video-caption-bar">
+          <div class="video-tag">✨ Nov 20 • 11:20 • Chapter 20 Special Reel ✨</div>
+          <p class="video-subtext">"சில நினைவுகள் காலத்தால் அழியாதவை... Happy 20th Birthday Thangom! 💖"</p>
+          <div class="video-controls-hint">
+            <button id="videoCelebrationBtn" class="action-btn glow-pink">
+              🎉 Cheer & Shower Confetti!
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOVE-HATE & PEACE TREATY SECTION -->
+    <section class="section-container peace-treaty-section">
+      <div class="section-badge">🥺 Love & Fight Chronicles</div>
+      <h2 class="section-title">The "I Miss You" Peace Treaty</h2>
+      <p class="section-subtitle">
+        Yes, we had a silly fight. Yes, you drive me crazy. But nothing changes the truth:
+      </p>
+
+      <div class="treaty-card glass-card">
+        <div class="love-hate-meter">
+          <div class="meter-stat">
+            <span class="stat-emoji">😤</span>
+            <span class="stat-label">Hate You (For Fighting)</span>
+            <span class="stat-val">5%</span>
+          </div>
+          <div class="meter-stat highlight-love">
+            <span class="stat-emoji">💖</span>
+            <span class="stat-label">Love & Like You Always</span>
+            <span class="stat-val">1000%</span>
+          </div>
+          <div class="meter-stat highlight-miss">
+            <span class="stat-emoji">🥺</span>
+            <span class="stat-label">Missing You Right Now</span>
+            <span class="stat-val">Infinite</span>
+          </div>
+        </div>
+
+        <div class="treaty-quote">
+          "I like you always. I love you forever. And okay, I hate you a little bit too for not talking to me! Can we patch up now? 🥺❤️"
+        </div>
+
+        <div class="treaty-buttons">
+          <button id="sendHugBtn" class="action-btn glow-pink">
+            🫂 Send Warm Hug & Patch Up
+          </button>
+          <button id="missYouBtn" class="action-btn glow-violet">
+            🥺 I Miss You A Lot
+          </button>
+          <button id="hateYouBtn" class="action-btn glow-gold">
+            😤 I Hate You (A Little Bit)
+          </button>
+        </div>
+
+        <div id="treatyResponse" class="treaty-response"></div>
+      </div>
+    </section>
+
+    <!-- SECRET 11:20 ENVELOPE / HEARTFELT LETTER -->
+    <section class="section-container letter-section">
+      <div class="section-badge">💌 From The Heart</div>
+      <h2 class="section-title">A Sealed Letter For You</h2>
+      <p class="section-subtitle">Click the wax seal to open your special 20th birthday letter</p>
+
+      <div class="envelope-wrapper" id="envelopeWrapper">
+        <div class="envelope" id="birthdayEnvelope">
+          <div class="envelope-flap"></div>
+          <div class="envelope-seal" id="envelopeSeal">
+            <span>20</span>
+          </div>
+          <div class="envelope-pocket"></div>
+          <div class="letter-paper" id="letterPaper">
+            <div class="letter-header">
+              <span class="letter-date">November 20 • 11:20 AM</span>
+              <span class="letter-tag">Happy 20th Birthday!</span>
+            </div>
+            <div class="letter-body">
+              <p>Dearest <strong class="friend-name-placeholder">Thangom</strong>,</p>
+              <p>
+                I know I didn’t send this right at 12 sharp. But trust me, from the moment I woke up until this very second, not a single heartbeat passed without thinking of you.
+              </p>
+              <p>
+                We got into that stupid little fight recently but cant say that as fight, and to be completely honest... <strong>I miss you so much.</strong>
+                It feels so empty and weird not talking to you, not hearing your voice, and not fighting with you like we always do.
+              </p>
+              <div class="letter-love-hate">
+                <p>
+                  <strong>I want you to know this:</strong><br>
+                  I like you always. I love you with all my heart... and yes, <strong>I hate you too! 😤❤️</strong><br>
+                  I hate that you stay quiet, but I know you tired to talk and I tried to avoid..!dont know what made me to do that, I hate how impossible it is for me to stay mad at you for even a minute.
+                </p>
+              </div>
+              <p class="letter-tamil">
+                "நம்ம ரெண்டு பேருக்கும் நடுவுல ஆயிரம் சண்டை வரலாம்டி... ஆனா எந்த சண்டையையும் விட உன் மேல நான் வெச்சிருக்க பாசம் தான்டி என்னைக்கும் பெருசு! I miss you so much Dhivya!" 🥺💫
+              </p>
+              <p>
+                Today you are turning <strong>20</strong> — stepping into Chapter 20 of your life. Leaving your teens behind and entering your twenties looking like the absolute queen you are.
+                May this year bring you endless happiness, boundless success, and may we keep fighting, laughing, and loving each other forever.
+              </p>
+              <p class="letter-closing">
+                Always your YellowHeart, even when we fight, 💖<br>
+                <em>Forever & Always 🫂</em>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="letter-tap-guide" id="letterGuide">
+        👇 Tap the wax seal <strong>'20'</strong> to open and read! 👇
+      </div>
+    </section>
+
+    <!-- TIME CAPSULE / 20 WISHES FOR YOUR 20s -->
+    <section class="section-container wishes-board">
+      <div class="section-badge">✨ Future Dreams</div>
+      <h2 class="section-title">20 Wishes for Your Roaring Twenties</h2>
+      
+      <div class="wishes-pill-cloud">
+        <div class="wish-pill">✈️ Travel the World</div>
+        <div class="wish-pill">💰 Unlimited Success</div>
+        <div class="wish-pill">☕ Cozy Coffee Mornings</div>
+        <div class="wish-pill">🌈 Peace of Mind</div>
+        <div class="wish-pill">🍕 Endless Good Food</div>
+        <div class="wish-pill">🌻 Pure Unfiltered Joy</div>
+        <div class="wish-pill">📚 Conquering Every Goal</div>
+        <div class="wish-pill">🎵 Midnight Drive Playlists</div>
+        <div class="wish-pill">💖 Loving Friendships</div>
+        <div class="wish-pill">✨ Glowing Confidence</div>
+        <div class="wish-pill">🏖️ Beautiful Sunsets</div>
+        <div class="wish-pill">🚀 Reaching the Stars</div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer text-center">
+      <div class="footer-heart">💖</div>
+      <p class="footer-title">Crafted with endless love for your 20th Birthday</p>
+      <p class="footer-sub">November 20 • 11:20 • Happy 20th Birthday Dearest Girl!</p>
+      <div class="footer-buttons">
+        <button id="finalConfettiBtn" class="glow-pill-btn">Shower Love with Fireworks 🎆</button>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- CUSTOMIZE MODAL (Allows user to edit name, time, custom message directly in browser!) -->
+  <button id="openSettingsBtn" class="floating-settings-btn" title="Edit Name & Details">
+    ⚙️ Edit Info
+  </button>
+
+  <div class="settings-modal" id="settingsModal">
+    <div class="settings-content glass-card">
+      <div class="modal-header">
+        <h3>✨ Customize Birthday Details</h3>
+        <button id="closeSettingsBtn" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <label>Friend's Name / Nickname:
+          <input type="text" id="inputFriendName" placeholder="e.g. Thangom / Dhivya / Chellam">
+        </label>
+        <label>Birthday Date (YYYY-MM-DD):
+          <input type="date" id="inputBirthDate" value="2026-11-20">
+        </label>
+        <label>Special Time:
+          <input type="text" id="inputSpecialTime" value="11:20 AM" placeholder="11:20 AM">
+        </label>
+        <label>Custom Birthday Message:
+          <textarea id="inputCustomMessage" rows="3" placeholder="Write a short custom wish..."></textarea>
+        </label>
+        <button id="saveSettingsBtn" class="action-btn glow-pink full-width">Save & Apply Live ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Chimes Synthesizer via Web Audio API script -->
+  <script src="script.js"></script>
+</body>
+</html>
